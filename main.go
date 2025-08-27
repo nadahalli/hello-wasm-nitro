@@ -24,17 +24,6 @@ type WASMResponse struct {
 	Error  string `json:"error,omitempty"`
 }
 
-// Legacy types for backwards compatibility
-type GCDRequest struct {
-	A int32 `json:"a"`
-	B int32 `json:"b"`
-}
-
-type GCDResponse struct {
-	Result int32  `json:"result"`
-	Error  string `json:"error,omitempty"`
-}
-
 const (
 	// Port for our WASM service
 	WASMPort = 8080

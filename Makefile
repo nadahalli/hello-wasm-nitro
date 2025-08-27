@@ -1,35 +1,17 @@
-.PHONY: all build-host build-client build-enclave build-eif run-host run-enclave test clean
+.PHONY: all build-host build-wasm-client build-enclave build-eif run-host run-enclave test clean
 
 # Build all components
-all: build-host build-client build-enclave
-
-# Build local testing components
-all-local: build-local-host build-local-client
+all: build-host build-wasm-client build-enclave
 
 # Build the host (parent instance)
 build-host:
 	@echo "Building host..."
 	@go build -o bin/host main.go
 
-# Build the client
-build-client:
-	@echo "Building client..."
-	@go build -o bin/client client/main.go
-
 # Build the WASM client
 build-wasm-client:
 	@echo "Building WASM client..."
 	@go build -o bin/wasm-client wasm-client/main.go
-
-# Build local host for testing
-build-local-host:
-	@echo "Building local host..."
-	@go build -o bin/local-host local-host.go
-
-# Build local client for testing
-build-local-client:
-	@echo "Building local client..."
-	@go build -o bin/local-client local-client.go
 
 # Build the enclave server
 build-enclave:
@@ -62,25 +44,10 @@ run-host:
 	@echo "Starting host..."
 	@./bin/host
 
-# Run the local host for testing
-run-local-host:
-	@echo "Starting local host..."
-	@./bin/local-host
-
 # Test secret injection
 test-secrets: build-wasm-client
 	@echo "Testing secret injection with template..."
 	@./bin/wasm-client secret-template.wat secure_compute 100
-
-# Test the client (requires host to be running)
-test: build-client
-	@echo "Testing with client..."
-	@./bin/client 48 18
-
-# Run enclave locally (for testing without Nitro)
-run-enclave:
-	@echo "Running enclave server locally..."
-	@./bin/enclave-server
 
 # Clean build artifacts
 clean:
@@ -110,21 +77,13 @@ verify-pcr:
 help:
 	@echo "Available targets:"
 	@echo "  all              - Build all components"
-	@echo "  all-local        - Build local testing components"
 	@echo "  build-host       - Build the host component"
-	@echo "  build-client     - Build the legacy client component" 
 	@echo "  build-wasm-client - Build the WASM client"
 	@echo "  build-enclave    - Build the enclave server"
-	@echo "  build-local-host - Build local host for testing"
-	@echo "  build-local-client - Build local client for testing"
 	@echo "  deploy-enclave   - Deploy enclave with debug mode"
 	@echo "  deploy-enclave-prod - Deploy enclave without debug mode"
 	@echo "  redeploy         - Quick rebuild and redeploy enclave"
 	@echo "  run-host         - Run the host"
-	@echo "  run-local-host   - Run local host for testing"
-	@echo "  run-enclave      - Run enclave server locally"
-	@echo "  test             - Test with legacy client"
-	@echo "  test-local       - Test with local client (TCP)"
 	@echo "  test-secrets     - Test secret injection"
 	@echo "  clean            - Clean build artifacts"
 	@echo "  init             - Initialize Go modules"

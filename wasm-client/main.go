@@ -31,7 +31,6 @@ func main() {
 		fmt.Println("Examples:")
 		fmt.Println("  ./wasm-client simple.wat square 7")
 		fmt.Println("  ./wasm-client secret-template.wat secure_compute 100")
-		fmt.Println("  ./wasm-client add.wasm add 10 20")
 		os.Exit(1)
 	}
 
