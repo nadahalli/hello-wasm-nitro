@@ -4,9 +4,8 @@
   (import "env" "SECRET_MULTIPLIER" (global $SECRET_MULTIPLIER i32))
   
   (func $secure_compute (param i32) (result i32)
-    ;; Take input, add API key hash, multiply by secret
     local.get 0
-    global.get $API_KEY_HASH
+    global.get $SECRET_MULTIPLIER
     i32.add
     global.get $SECRET_MULTIPLIER  
     i32.mul)
